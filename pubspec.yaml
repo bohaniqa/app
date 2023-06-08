@@ -1,0 +1,101 @@
+name: boq
+description: A new Flutter project.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_native_splash: ^2.2.19
+  shared_preferences: ^2.1.1
+  provider: ^6.0.5
+  http: ^1.0.0
+  url_launcher: ^6.1.11
+  solana_wallet_provider:
+    path: ../../Solana/solana_wallet_provider
+  solana_borsh:
+    path: ../../Solana/solana_borsh
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_native_splash:
+  fullscreen: true
+  color: '#3778FA'
+  image: assets/images/logo-white.png
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/app-icon.png"
+  min_sdk_android: 16
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/nfts/
+
+  fonts:
+    - family: BOQIcons
+      fonts:
+        - asset: assets/fonts/boq/BOQIcons.ttf
+
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/rubik/Rubik-Light.ttf
+          weight: 300
+
+        - asset: assets/fonts/rubik/Rubik-LightItalic.ttf
+          weight: 300
+          style: italic
+
+        - asset: assets/fonts/rubik/Rubik-Regular.ttf
+          weight: 400
+
+        - asset: assets/fonts/rubik/Rubik-Italic.ttf
+          weight: 400
+          style: italic
+
+        - asset: assets/fonts/rubik/Rubik-Medium.ttf
+          weight: 500
+
+        - asset: assets/fonts/rubik/Rubik-MediumItalic.ttf
+          weight: 500
+          style: italic
+
+        - asset: assets/fonts/rubik/Rubik-SemiBold.ttf
+          weight: 600
+
+        - asset: assets/fonts/rubik/Rubik-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+
+        - asset: assets/fonts/rubik/Rubik-Bold.ttf
+          weight: 700
+
+        - asset: assets/fonts/rubik/Rubik-BoldItalic.ttf
+          weight: 700
+          style: italic
+          
+        - asset: assets/fonts/rubik/Rubik-ExtraBold.ttf
+          weight: 800
+
+        - asset: assets/fonts/rubik/Rubik-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+          
+        - asset: assets/fonts/rubik/Rubik-Black.ttf
+          weight: 900
+
+        - asset: assets/fonts/rubik/Rubik-BlackItalic.ttf
+          weight: 900
+          style: italic
