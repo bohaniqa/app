@@ -14,10 +14,10 @@ dependencies:
   provider: ^6.0.5
   http: ^1.0.0
   url_launcher: ^6.1.11
-  solana_wallet_provider:
-    path: ../../Solana/solana_wallet_provider
-  solana_borsh:
-    path: ../../Solana/solana_borsh
+  solana_wallet_provider: ^0.1.0
+    # path: ../../Solana/solana_wallet_provider
+  solana_borsh: ^0.0.1
+    # path: ../../Solana/solana_borsh
 
 dev_dependencies:
   flutter_test:

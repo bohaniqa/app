@@ -424,80 +424,91 @@ packages:
   solana_borsh:
     dependency: "direct main"
     description:
-      path: "../../Solana/solana_borsh"
-      relative: true
-    source: path
+      name: solana_borsh
+      sha256: "33b061a09c85bd34798a0104c26049511d55cc390e05c68243c8a9d5a344c5ba"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.0.1"
   solana_buffer:
     dependency: transitive
     description:
-      path: "../../Solana/solana_buffer"
-      relative: true
-    source: path
+      name: solana_buffer
+      sha256: fbd7b5139ac0e64cc190e50530dd369a78b8b83f5bf5178a0a014afa55b4e9d2
+      url: "https://pub.dev"
+    source: hosted
     version: "0.0.1"
   solana_common:
     dependency: transitive
     description:
-      path: "../../Solana/solana_common"
-      relative: true
-    source: path
-    version: "0.1.0"
+      name: solana_common
+      sha256: d181abe055c0df1f95818dfa67b12a2f1a93030745238e13f3aa49053f9aee6d
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0+1"
   solana_jsonrpc:
     dependency: transitive
     description:
-      path: "../../Solana/solana_jsonrpc"
-      relative: true
-    source: path
+      name: solana_jsonrpc
+      sha256: "1bb286b60918a621d5909503e0daa928c9f99f2241d8eb4b2cc7f74d1a78deee"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.0.1"
   solana_wallet_adapter:
     dependency: transitive
     description:
-      path: "../../Solana/solana_wallet_adapter"
-      relative: true
-    source: path
-    version: "0.0.7"
+      name: solana_wallet_adapter
+      sha256: "8527c50dab33186c128312e3fe9ad89356e3c7d17b9cb4bde0db6e302dc35bfd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   solana_wallet_adapter_android:
     dependency: transitive
     description:
-      path: "../../Solana/solana_wallet_adapter_android"
-      relative: true
-    source: path
-    version: "0.0.4"
+      name: solana_wallet_adapter_android
+      sha256: f9ba9abf7eb7d826ead36db59542c8f9c04ef361a9f69c5ec9f6ea007c34390d
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   solana_wallet_adapter_ios:
     dependency: transitive
     description:
-      path: "../../Solana/solana_wallet_adapter_ios"
-      relative: true
-    source: path
-    version: "0.0.4"
+      name: solana_wallet_adapter_ios
+      sha256: "2c74843ab5f9ce98feb86bcc70f1bf6c244c6b01023ec5037bca0578c954601e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   solana_wallet_adapter_platform_interface:
     dependency: transitive
     description:
-      path: "../../Solana/solana_wallet_adapter_platform_interface"
-      relative: true
-    source: path
-    version: "0.0.4"
+      name: solana_wallet_adapter_platform_interface
+      sha256: "107ad4555b0ce634482383824df51f84664d68cf3322ad77cf30e0fa9eb08ac7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   solana_wallet_adapter_web:
     dependency: transitive
     description:
-      path: "../../Solana/solana_wallet_adapter_web"
-      relative: true
-    source: path
-    version: "0.0.4"
+      name: solana_wallet_adapter_web
+      sha256: c93256606c85063153596d752a8fa36b630a836bcb262a97f15ab6f08d6163c4
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   solana_wallet_provider:
     dependency: "direct main"
     description:
-      path: "../../Solana/solana_wallet_provider"
-      relative: true
-    source: path
-    version: "0.0.8"
+      name: solana_wallet_provider
+      sha256: c43dda78b373215c86872c0ed151c4cd02eea2a332cc1f8bc3117eaac8c941ab
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   solana_web3:
     dependency: transitive
     description:
-      path: "../../Solana/solana_web3"
-      relative: true
-    source: path
-    version: "0.0.8"
+      name: solana_web3
+      sha256: "31e6c19c7038ede40e55fa7626e76d44d74b5a39c6133a95dfd2230f71799d73"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   source_span:
     dependency: transitive
     description:

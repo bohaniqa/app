@@ -162,7 +162,6 @@ class BOQEmployer extends BorshObject {
   };
 }
 
-
 class BOQEmployee extends BorshObject {
 
   const BOQEmployee({
