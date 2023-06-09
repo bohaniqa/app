@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:boq/src/consts.dart';
 import 'package:boq/src/providers/account.dart';
 import 'package:boq/src/providers/miners.dart';
@@ -8,7 +7,6 @@ import 'package:boq/src/theme.dart';
 import 'package:boq/src/widgets/icon_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:solana_wallet_provider/solana_wallet_provider.dart';
-
 import '../program/program.dart';
 import '../program/state.dart';
 
@@ -68,7 +66,10 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
   @override
   void initState() {
     super.initState();
-    _shift(widget.provider);
+    Future.delayed(
+      const Duration(milliseconds: 200),
+      () => _shift(widget.provider),
+    );
   }
 
   void _cancel() {
@@ -268,8 +269,6 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
         tokens: tokens,
       );
 
-      print('MINER PAIRS $nftsAndEmployeePairs');
-
       if (nftsAndEmployeePairs.isEmpty) {
         _message = 'Your miners are up to date.';
         state = _BOQShiftState.success;
@@ -300,6 +299,7 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
           );
         }
         await Future.wait(notifications, eagerError: true);
+        BOQAccountProvider.instance.update(provider).ignore();
         _message = "See you tomorrow!";
         state = _BOQShiftState.success;
       }

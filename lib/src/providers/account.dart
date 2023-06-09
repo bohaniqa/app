@@ -43,7 +43,7 @@ class BOQAccount {
   }
   
   Map<String, dynamic> toJson() => {
-    'amount': amount.toString(),
+    'amount': amount?.toString(),
     'employer': _toJson(employer?.toJson()),
     'shift': _toJson(shift?.toJson()),
     'slot': slot,
@@ -69,20 +69,33 @@ class BOQAccountProvider extends BOQProvider<BOQAccount> {
 
   @override
   Future<BOQAccount>? query(final SolanaWalletProvider provider) async {
+    TokenAmount? tokenAmount;
+    AccountInfo? employerAccount;
+    AccountInfo? shiftAccount;
+    late int slot;
     final wallet = provider.connectedAccount?.toPubkey();
-    if (wallet == null) throw Exception('Wallet not connected.');
-    final ata = Pubkey.findAssociatedTokenAddress(wallet, kTokenMint);
-    final builder = JsonRpcMethodBuilder<dynamic, dynamic>([
-      GetTokenAccountBalance(ata.pubkey),
-      GetAccountInfo(BOQShiftProgram.findEmployer().pubkey),
-      GetAccountInfo(BOQShiftProgram.findShift(wallet).pubkey),
-      GetSlot(),
-    ]);
-    final responses = await provider.connection.sendAll(builder);
-    final TokenAmount? tokenAmount = _unwrapResponseContext(responses[0]);
-    final AccountInfo? employerAccount = _unwrapResponseContext(responses[1]);
-    final AccountInfo? shiftAccount = _unwrapResponseContext(responses[2]);
-    final int slot = (responses[3] as JsonRpcSuccessResponse).result as int;
+    final employerPubkey = BOQShiftProgram.findEmployer().pubkey;
+    if (wallet != null) {
+      final builder = JsonRpcMethodBuilder<dynamic, dynamic>([
+        GetTokenAccountBalance(Pubkey.findAssociatedTokenAddress(wallet, kTokenMint).pubkey),
+        GetAccountInfo(employerPubkey),
+        GetAccountInfo(BOQShiftProgram.findShift(wallet).pubkey),
+        GetSlot(),
+      ]);
+      final responses = await provider.connection.sendAll(builder);
+      tokenAmount = _unwrapResponseContext(responses[0]);
+      employerAccount = _unwrapResponseContext(responses[1]);
+      shiftAccount = _unwrapResponseContext(responses[2]);
+      slot = (responses[3] as JsonRpcSuccessResponse).result as int;
+    } else {
+      final builder = JsonRpcMethodBuilder<dynamic, dynamic>([
+        GetAccountInfo(employerPubkey),
+        GetSlot(),
+      ]);
+      final responses = await provider.connection.sendAll(builder);
+      employerAccount = _unwrapResponseContext(responses[0]);
+      slot = (responses[1] as JsonRpcSuccessResponse).result as int;
+    }
     return BOQAccount(
       amount: tokenAmount?.amount,
       employer: BOQEmployer.tryFromBase64(employerAccount?.binaryData),

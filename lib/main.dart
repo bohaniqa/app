@@ -37,11 +37,11 @@ void main() async {
 
   runApp(
     SolanaWalletProvider.create(
-      httpCluster: cluster,
+      httpCluster: kCluster,
       identity: AppIdentity(
         uri: Uri.parse('https://bohaniqa.com'),
         icon: Uri.parse('favicon.png'),
-        name: 'BOQ'
+        name: kAppName
       ),
       child: MultiProvider(
         providers: [
@@ -74,6 +74,8 @@ class _BOQLoadStateState extends State<BOQLoadState> {
     if (!_initialized) {
       _initialized = true;
       provider.adapter.addListener(() => _onAuthorizedStateChanged(provider));
+      BOQAccountProvider.instance.update(provider).ignore();
+      BOQPriceProvider.instance.update(provider).ignore();
       _onAuthorizedStateChanged(provider);
       FlutterNativeSplash.remove();
     }
@@ -81,9 +83,7 @@ class _BOQLoadStateState extends State<BOQLoadState> {
 
   void _onAuthorizedStateChanged(final SolanaWalletProvider provider) {
     if (provider.adapter.isAuthorized) {
-      BOQAccountProvider.instance.update(provider).ignore();
       BOQMinersProvider.instance.update(provider).ignore();
-      BOQPriceProvider.instance.update(provider).ignore();
     }
   }
 

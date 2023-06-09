@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' show pow;
 import 'package:solana_wallet_provider/solana_wallet_provider.dart';
 
 const String kFontFamily = 'Rubik';
@@ -7,7 +7,7 @@ const String kTokenSymbol = 'BOQ';
 const double kSpacing = 24.0;
 const double kItemSpacing = 8.0;
 
-final cluster = Cluster.devnet;
+final kCluster = Cluster.devnet;
 
 final kTokenMint = Pubkey.fromBase58('6VL54oH9h56D9dsXWJpg8VF1jsuf8SWHamVg2DuSuP1f');
 final kTokenMetadata = MetaplexTokenMetadataProgram.findMetadataAddress(kTokenMint);

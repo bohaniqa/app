@@ -157,6 +157,17 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
     );
   } 
 
+  Widget _fallbackItemBuilder(final BuildContext context, final int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(child: _image(index)),
+        const SizedBox(width: kItemSpacing),
+        Flexible(child: _image(index + 5000)),
+      ],
+    );
+  } 
+
   Widget _separatorBuilder(final BuildContext context, final int index) {
     return const SizedBox(height: 8);
   } 
@@ -212,7 +223,13 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
                               parent: BouncingScrollPhysics(),
                             ),
                           )
-                        : const Column(
+                        : !isAuthorized
+                          ? ListView.separated(
+                              itemCount: 50,
+                              itemBuilder: _fallbackItemBuilder, 
+                              separatorBuilder: _separatorBuilder,
+                            )
+                          : const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
