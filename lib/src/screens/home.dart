@@ -172,6 +172,28 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
     return const SizedBox(height: 8);
   } 
 
+  Future<void> _onRefresh() async {
+    try {
+      final provider = SolanaWalletProvider.of(context);
+      await fullUpdate(provider);
+    } catch(_) {
+      final snackBar = SnackBar(
+        backgroundColor: BOQColors.theme.tile,
+        shape: Border(
+          top: BorderSide(
+            width: 4.0,
+            color: BOQColors.theme.background,
+          )
+        ),
+        content: Text(
+          'Unable to refresh.', 
+          style: TextStyle(color: BOQColors.theme.text),
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
   @override
   Widget build(final BuildContext context) {
     final provider = SolanaWalletProvider.of(context);
@@ -188,7 +210,7 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
       displacement: kSpacing * 2.0,
       color: BOQColors.theme.accent1,
       triggerMode: RefreshIndicatorTriggerMode.anywhere,
-      onRefresh: () => Future.delayed(const Duration(seconds: 1)),
+      onRefresh: _onRefresh,
       child: BOQScreen(
         title: kAppName,
          child: Stack(

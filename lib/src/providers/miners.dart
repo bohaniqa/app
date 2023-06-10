@@ -76,14 +76,14 @@ class BOQMinersProvider extends BOQProvider<Map<String, BOQMiner>> {
         filter: TokenAccountsFilter.programId(TokenProgram.programId),
       ),
     ]);
-
+    
     final List<_BOQMinerItem> blueMiners = [];
     final List<_BOQMinerItem> pinkMiners = [];
-    final mintedTokens = Map<String, int>.from(responses[0]);
+    final mintedTokens = Map<String, int>.from(responses[0]); // collectionMints;
     final tokenAccounts = responses[1] as List<TokenAccount>;
     for (final tokenAccount in tokenAccounts) {
       final token = TokenAccountInfo.fromAccountInfo(tokenAccount.account);
-      if (collectionMints.containsKey(token.mint)) {
+      if (mintedTokens.containsKey(token.mint)) {
         final item = _BOQMinerItem(
           id: mintedTokens[token.mint]!, 
           mint: token.mint, 

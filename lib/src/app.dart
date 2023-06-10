@@ -75,22 +75,16 @@ class _BOQAppState extends State<BOQApp> {
   Widget build(final BuildContext context) {
     final provider = SolanaWalletProvider.of(context);
     final backgroundColor = Theme.of(context).colorScheme.background;
-    const maxWidth = BoxConstraints(maxWidth: 588);
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: Center(
-        child: ConstrainedBox(
-          constraints: maxWidth,
-          child: Column(
-            children: [
-              Expanded(
-                child: _pages[_index],
-              ),
-              if (!provider.isAuthorized)
-                _signInPopup(),
-            ],
+      body: Column(
+        children: [
+          Expanded(
+            child: _pages[_index],
           ),
-        ),
+          if (!provider.isAuthorized)
+            _signInPopup(),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,

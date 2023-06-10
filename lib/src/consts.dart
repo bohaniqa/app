@@ -1,4 +1,7 @@
 import 'dart:math' show pow;
+import 'package:boq/src/providers/account.dart';
+import 'package:boq/src/providers/miners.dart';
+import 'package:boq/src/providers/price.dart';
 import 'package:solana_wallet_provider/solana_wallet_provider.dart';
 
 const String kFontFamily = 'Rubik';
@@ -22,4 +25,15 @@ const kMaxShifts = 10000;
 
 double fromTokenAmount(final BigInt value, [final int decimals = 8]) {
   return value / pow(10, decimals).toBigInt();
+}
+
+Future<void> fullUpdate(final SolanaWalletProvider provider) {
+  final futures = [
+    BOQPriceProvider.instance.update(provider),
+    BOQAccountProvider.instance.update(provider),
+  ];
+  if (provider.isAuthorized) {
+    futures.add(BOQMinersProvider.instance.update(provider));
+  }
+  return Future.wait(futures);
 }

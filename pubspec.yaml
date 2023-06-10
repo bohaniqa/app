@@ -18,7 +18,7 @@ dependencies:
   url_launcher: ^6.1.11
   solana_borsh: ^0.0.1
     # path: ../../Solana/solana_borsh
-  solana_wallet_provider: ^0.1.1
+  solana_wallet_provider: ^0.1.2
     # path: ../../Solana/solana_wallet_provider
 
 dev_dependencies:

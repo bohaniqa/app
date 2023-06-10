@@ -73,16 +73,14 @@ class _BOQLoadStateState extends State<BOQLoadState> {
   void _initView(final SolanaWalletProvider provider) {
     if (!_initialized) {
       _initialized = true;
+      fullUpdate(provider).ignore();
       provider.adapter.addListener(() => _onAuthorizedStateChanged(provider));
-      if (!provider.adapter.isAuthorized) BOQAccountProvider.instance.update(provider).ignore();
-      BOQPriceProvider.instance.update(provider).ignore();
-      _onAuthorizedStateChanged(provider);
       FlutterNativeSplash.remove();
     }
   }
 
   void _onAuthorizedStateChanged(final SolanaWalletProvider provider) {
-    if (provider.adapter.isAuthorized) {
+    if (provider.isAuthorized) {
       BOQAccountProvider.instance.update(provider).ignore();
       BOQMinersProvider.instance.update(provider).ignore();
     }
@@ -99,9 +97,18 @@ class _BOQLoadStateState extends State<BOQLoadState> {
     final ThemeData theme = createThemeData(brightness);
     
     return MaterialApp(
+      title: '$kAppName App',
       debugShowCheckedModeBanner: false,
       theme: theme,
-      home: const BOQApp(),
+      home: ColoredBox(
+        color: theme.colorScheme.background,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 588),
+            child: const BOQApp(),
+          ),
+        ),
+      ),
     );
   }
 }
