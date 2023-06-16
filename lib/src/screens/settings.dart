@@ -56,7 +56,7 @@ class _BOQSettingsScreenState extends State<BOQSettingsScreen> {
   void _onSwitchChanged(final bool value) {
     if (mounted) {
       final Brightness brightness = value ? Brightness.dark : Brightness.light;
-      BOQSettingsProvider.instance.value = BOQSettings(brightness: brightness);
+      BOQSettingsProvider.instance.set(brightness: brightness);
       setState(() => _brightness = brightness);
     }
   }

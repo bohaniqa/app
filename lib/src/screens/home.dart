@@ -5,6 +5,7 @@ import 'package:boq/src/program/state.dart';
 import 'package:boq/src/providers/account.dart';
 import 'package:boq/src/providers/miners.dart';
 import 'package:boq/src/providers/price.dart';
+import 'package:boq/src/providers/settings.dart';
 import 'package:boq/src/screens/screen.dart';
 import 'package:boq/src/theme.dart';
 import 'package:boq/src/widgets/currency_symbol.dart';
@@ -115,6 +116,42 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
     );
   }
 
+  void _acknowledged() {
+    BOQSettingsProvider.instance.set(minerNotice: true);
+    if (mounted) setState(() {});
+  }
+
+  Widget _notice() => Padding(
+    padding: const EdgeInsets.only(
+      bottom: kSpacing,
+    ),
+    child: Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: kItemSpacing * 2,
+          horizontal: kSpacing,
+        ),
+        child: Row(
+          children: [
+            const Expanded(
+              child: Text(
+                'It can take up to 24 hours for a newly minted miner to appear.',
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+            ),
+            const SizedBox(
+              width: kItemSpacing,
+            ),
+            TextButton(
+              onPressed: _acknowledged, 
+              child: const Text('Ok'),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+
   Widget _frameBuilder(
     final BuildContext context, 
     final Widget child, 
@@ -206,6 +243,7 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
     final Map<String, BOQMiner>? miners = minersProvider.value;
     final BOQPriceProvider priceProvider = context.watch<BOQPriceProvider>();
     final double? price = priceProvider.value;
+    final bool noticeAcknowledged = BOQSettingsProvider.instance.value?.minerNotice ?? false;
     return RefreshIndicator(
       displacement: kSpacing * 2.0,
       color: BOQColors.theme.accent1,
@@ -232,6 +270,8 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(height: kSpacing),
+                    if (!noticeAcknowledged)
+                      _notice(),
                     Expanded(
                       child: miners != null
                         ? ListView.separated(

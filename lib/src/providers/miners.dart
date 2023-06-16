@@ -77,46 +77,19 @@ class BOQMinersProvider extends BOQProvider<Map<String, BOQMiner>> {
       ),
     ]);
     
-    final List<_BOQMinerItem> blueMiners = [];
-    final List<_BOQMinerItem> pinkMiners = [];
     final mintedTokens = Map<String, int>.from(responses[0]); // collectionMints;
     final tokenAccounts = responses[1] as List<TokenAccount>;
+    final Map<String, BOQMiner> miners = {};
     for (final tokenAccount in tokenAccounts) {
       final token = TokenAccountInfo.fromAccountInfo(tokenAccount.account);
       if (mintedTokens.containsKey(token.mint)) {
-        final item = _BOQMinerItem(
+        miners[token.mint] = BOQMiner(
           id: mintedTokens[token.mint]!, 
-          mint: token.mint, 
           token: tokenAccount.pubkey,
         );
-        if (item.id < 5000) {
-          blueMiners.add(item);
-        } else {
-          pinkMiners.add(item);
-        }
       }
     }
 
-    blueMiners.sort((a, b) => a.id - b.id);
-    pinkMiners.sort((a, b) => a.id - b.id);
-    final int maxLength = max(blueMiners.length, pinkMiners.length);
-    final Map<String, BOQMiner> miners = {};
-    for (int i = 0; i < maxLength; ++i) {
-      if (i < blueMiners.length) {
-        final blueMiner = blueMiners[i];
-        miners[blueMiner.mint] = BOQMiner(
-          id: blueMiner.id, 
-          token: blueMiner.token,
-        );
-      }
-      if (i < pinkMiners.length) {
-        final pinkMiner = pinkMiners[i];
-        miners[pinkMiner.mint] = BOQMiner(
-          id: pinkMiner.id, 
-          token: pinkMiner.token,
-        );
-      }
-    }
     return miners;
   }
 

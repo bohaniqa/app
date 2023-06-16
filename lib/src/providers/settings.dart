@@ -7,16 +7,29 @@ class BOQSettings {
 
   const BOQSettings({
     required this.brightness,
+    required this.minerNotice,
   });
 
   final Brightness brightness;
 
+  final bool minerNotice;
+
+  BOQSettings copyWith({
+    final Brightness? brightness,
+    final bool? minerNotice,
+  }) => BOQSettings(
+    brightness: brightness ?? this.brightness, 
+    minerNotice: minerNotice ?? this.minerNotice,
+  );
+
   factory BOQSettings.fromJson(final Map<String, dynamic> json) => BOQSettings(
-    brightness: Brightness.values.byName(json['brightness'] ?? Brightness.light.name),
+    brightness: Brightness.values.byName(json['brightness'] ?? Brightness.dark.name),
+    minerNotice: json['minerNotice'] ?? false,
   );
   
   Map<String, dynamic> toJson() => {
     'brightness': brightness.name,
+    'minerNotice': minerNotice
   };
 }
 
@@ -42,4 +55,22 @@ class BOQSettingsProvider extends BOQProvider<BOQSettings> {
   @override
   Future<bool> write(final SharedPreferences prefs, final BOQSettings? data) 
     => writeJson(prefs, data?.toJson());
+
+  void set({
+    final Brightness? brightness,
+    final bool? minerNotice,
+  }) {
+    final BOQSettings? settings = instance.value;
+    if (settings != null) {
+      instance.value = settings.copyWith(
+        brightness: brightness,
+        minerNotice: minerNotice,
+      );
+    } else {
+      instance.value = BOQSettings(
+        brightness: brightness ?? Brightness.dark, 
+        minerNotice: minerNotice ?? false
+      );
+    }
+  }
 }
