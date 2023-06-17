@@ -6,7 +6,7 @@ String _formatLabel(final int index, { required List<String> labels }) {
 
 String abbreviateNumber(final num value, { int? dps }) {
   
-  const labels = ['', 'K', 'M', 'M', 'B', 'T'];
+  const labels = ['', 'K', 'M', 'B', 'T'];
 
   if (value == 0) {
     return '$value${_formatLabel(0, labels: labels)}';

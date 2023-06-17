@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:boq/src/consts.dart';
 import 'package:boq/src/fonts/icons.dart';
+import 'package:boq/src/providers/supply.dart';
 import 'package:boq/src/screens/home.dart';
 import 'package:boq/src/screens/settings.dart';
 import 'package:boq/src/screens/dashboard.dart';
@@ -21,6 +24,17 @@ class _BOQAppState extends State<BOQApp> {
 
   int _index = 0;
 
+  final int _dashboardIndex = 1;
+
+  Timer? _timer;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  
+  }
+
   final List<Widget> _pages = const [
     BOQHomeScreen(),
     BOQDashboardScreen(),
@@ -30,6 +44,25 @@ class _BOQAppState extends State<BOQApp> {
   void _onDestinationSelected(final int index) {
     if (mounted && index != _index) {
       setState(() => _index = index);
+      if (index == _dashboardIndex) {
+        _refreshSupply(_timer);
+        _timer = Timer.periodic(
+          const Duration(seconds: 5), 
+          _refreshSupply
+        );
+      } else {
+        _timer?.cancel();
+        _timer = null;
+      }
+    }
+  }
+
+  void _refreshSupply(final Timer? timer) {
+    try {
+      final provider = SolanaWalletProvider.of(context);
+      BOQSupplyProvider.instance.update(provider);
+    } catch (_) {
+
     }
   }
 

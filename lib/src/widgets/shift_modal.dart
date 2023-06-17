@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:boq/src/consts.dart';
 import 'package:boq/src/providers/account.dart';
 import 'package:boq/src/providers/miners.dart';
+import 'package:boq/src/providers/settings.dart';
 import 'package:boq/src/theme.dart';
 import 'package:boq/src/widgets/icon_badge.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,8 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
 
   late Pubkey _wallet;
 
+  late bool _force;
+
   static const int _shiftsPerTx = 10;
   static const int _txLimit = 10;
 
@@ -66,6 +69,7 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
   @override
   void initState() {
     super.initState();
+    _force = BOQSettingsProvider.instance.value?.forceShift ?? false;
     Future.delayed(
       const Duration(milliseconds: 200),
       () => _shift(widget.provider),
@@ -167,6 +171,42 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
     return chunks;
   }
 
+  void _debugRate({
+    required final BigInt slot,
+    required final BOQEmployer employer, 
+    required final BOQEmployee employee,
+    required final BigInt extraShifts,
+  }) {
+    final elapsed_slots = slot - employee.last_slot;
+    final available_slots = elapsed_slots < employer.slots_per_shift ? elapsed_slots : employer.slots_per_shift;
+    final employee_total_slots = employee.total_slots + available_slots;
+    final current_shift = extraShifts + (employee.total_slots ~/ employer.slots_per_shift);
+    final next_shift = current_shift + BigInt.one;
+    final shift_boundary = (current_shift + BigInt.one) * employer.slots_per_shift;
+    final next_shift_slots = employee_total_slots > shift_boundary
+      ? employee_total_slots % employer.slots_per_shift
+      : BigInt.zero;
+    final current_shift_slots = available_slots - next_shift_slots;
+    final a = employer.base_rate_per_slot * available_slots;
+    final b0 = employer.inflation_rate_per_slot * current_shift_slots * current_shift;
+    final b1 = employer.inflation_rate_per_slot * next_shift_slots * next_shift;
+    final inflation_rate = (employer.inflation_rate_per_slot * current_shift_slots * current_shift)
+    + (employer.inflation_rate_per_slot * next_shift_slots * next_shift);
+    print('********************************************************************************');
+    print('EMPLOYEE         = ${employee.toJson()}');
+    print('********************************************************************************');
+    print('SLOT HEIGHT      = $slot');
+    print('ELAPSED SLOTS    = $elapsed_slots');
+    print('AVAILABLE SLOTS  = $available_slots');
+    print('CURRENT SHIFT    = $current_shift');
+    print('NEXT SHIFT       = $next_shift');
+    print('NEXT SHIFT SLOTS = $next_shift_slots');
+    print('CURR SHIFT SLOTS = $current_shift_slots');
+    print('*** BASE RATE ***   = $a');
+    print('*** INFL RATE ***   = $inflation_rate ($b0 : $b1)');
+    print('*** PAYOUT ***   = ${fromTokenAmount(a + inflation_rate)}');
+  }
+
   Future<List<Pubkey>> _getAccounts(
     final Connection connection, {
     required final BigInt slot,
@@ -186,7 +226,8 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
       final AccountInfo? accountInfo = responses[i];
       if (accountInfo != null) {
         final BOQEmployee employee = BOQEmployee.fromBase64(accountInfo.binaryData);
-        if (employee.last_slot < updateThreshold) {
+        _debugRate(slot: slot, employer: employer, employee: employee, extraShifts: BigInt.from(3));
+        if (_force || employee.last_slot < updateThreshold) {
           accounts.add(tokens[i]);
           accounts.add(employees[i]);
         }

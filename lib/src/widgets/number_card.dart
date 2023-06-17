@@ -12,21 +12,25 @@ class BOQNumberCard extends StatelessWidget {
     required this.label,
     this.color,
     this.valueSuffix,
+    this.abbreviate,
   });
 
   final num? value;
   final String label;
   final Color? color;
   final Widget? valueSuffix;
+  final bool? abbreviate;
 
   factory BOQNumberCard.boq({
     required final num? value,
     required final String label,
     final Color? color,
+    final bool? abbreviate,
   }) => BOQNumberCard(
     value: value, 
     label: label, 
     color: color,
+    abbreviate: abbreviate,
     valueSuffix: BOQCurrencySymbol(
       color: BOQColors.theme.background,
     ),
@@ -73,6 +77,7 @@ class BOQNumberCard extends StatelessWidget {
         valueColor: BOQColors.theme.background,
         labelColor: BOQColors.theme.background,
         valueSuffix: valueSuffix,
+        abbreviate: abbreviate,
       ),
     ),
   );

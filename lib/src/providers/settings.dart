@@ -8,28 +8,35 @@ class BOQSettings {
   const BOQSettings({
     required this.brightness,
     required this.minerNotice,
+    required this.forceShift,
   });
 
   final Brightness brightness;
 
   final bool minerNotice;
 
+  final bool forceShift;
+
   BOQSettings copyWith({
     final Brightness? brightness,
     final bool? minerNotice,
+    final bool? forceShift,
   }) => BOQSettings(
     brightness: brightness ?? this.brightness, 
     minerNotice: minerNotice ?? this.minerNotice,
+    forceShift: forceShift ?? this.forceShift
   );
 
   factory BOQSettings.fromJson(final Map<String, dynamic> json) => BOQSettings(
     brightness: Brightness.values.byName(json['brightness'] ?? Brightness.dark.name),
     minerNotice: json['minerNotice'] ?? false,
+    forceShift: json['forceShift'] ?? false,
   );
   
   Map<String, dynamic> toJson() => {
     'brightness': brightness.name,
-    'minerNotice': minerNotice
+    'minerNotice': minerNotice,
+    'forceShift': forceShift,
   };
 }
 
@@ -59,17 +66,20 @@ class BOQSettingsProvider extends BOQProvider<BOQSettings> {
   void set({
     final Brightness? brightness,
     final bool? minerNotice,
+    final bool? forceShift,
   }) {
     final BOQSettings? settings = instance.value;
     if (settings != null) {
       instance.value = settings.copyWith(
         brightness: brightness,
         minerNotice: minerNotice,
+        forceShift: forceShift,
       );
     } else {
       instance.value = BOQSettings(
         brightness: brightness ?? Brightness.dark, 
-        minerNotice: minerNotice ?? false
+        minerNotice: minerNotice ?? false,
+        forceShift: forceShift ?? false
       );
     }
   }

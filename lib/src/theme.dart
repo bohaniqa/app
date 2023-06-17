@@ -169,7 +169,7 @@ ThemeData createThemeData(final Brightness brightness) {
       contentPadding: const EdgeInsets.all(kSpacing),
       tileColor: themeColors.tile,
       horizontalTitleGap: 16.0,
-      minVerticalPadding: 4.0,
+      minVerticalPadding: 0.0,
       dense: true,
       visualDensity: VisualDensity.compact,
     ),

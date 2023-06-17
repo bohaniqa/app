@@ -39,7 +39,7 @@ class BOQListTile extends StatelessWidget {
           subtitle!,
           style: TextStyle(
             color: BOQColors.theme.background,
-            fontSize: 16.0,
+            fontSize: 14.0,
           ),
         )
       : null,

@@ -66,7 +66,7 @@ class BOQEmployer extends BorshObject {
     required this.end_slot,
     required this.slots_per_shift,
     required this.base_rate_per_slot,
-    required this.rate_increase_per_shift,
+    required this.inflation_rate_per_slot,
 
     required this.token_mint,
     required this.collection_mint,
@@ -83,7 +83,7 @@ class BOQEmployer extends BorshObject {
   final BigInt end_slot;
   final BigInt slots_per_shift;
   final BigInt base_rate_per_slot;
-  final BigInt rate_increase_per_shift;
+  final BigInt inflation_rate_per_slot;
 
   final Pubkey token_mint;
   final Pubkey collection_mint;
@@ -98,7 +98,7 @@ class BOQEmployer extends BorshObject {
     'end_slot': borsh.u64,
     'slots_per_shift': borsh.u64,
     'base_rate_per_slot': borsh.u64,
-    'rate_increase_per_shift': borsh.u64,
+    'inflation_rate_per_slot': borsh.u64,
     'token_mint': borsh.pubkey,
     'collection_mint': borsh.pubkey,
   });
@@ -140,7 +140,7 @@ class BOQEmployer extends BorshObject {
     end_slot: _bigInt(json['end_slot']), 
     slots_per_shift: _bigInt(json['slots_per_shift']), 
     base_rate_per_slot: _bigInt(json['base_rate_per_slot']), 
-    rate_increase_per_shift: _bigInt(json['rate_increase_per_shift']), 
+    inflation_rate_per_slot: _bigInt(json['inflation_rate_per_slot']), 
     token_mint: Pubkey.fromBase58(json['token_mint']), 
     collection_mint: Pubkey.fromBase58(json['collection_mint']), 
   );
@@ -156,7 +156,7 @@ class BOQEmployer extends BorshObject {
     'end_slot': end_slot,
     'slots_per_shift': slots_per_shift,
     'base_rate_per_slot': base_rate_per_slot,
-    'rate_increase_per_shift': rate_increase_per_shift,
+    'inflation_rate_per_slot': inflation_rate_per_slot,
     'token_mint': token_mint.toBase58(),
     'collection_mint': collection_mint.toBase58(),
   };
@@ -257,6 +257,7 @@ class BOQShift extends BorshObject {
 
   factory BOQShift.fromBase64(final String encoded) {
     final Map<String, dynamic> json = codec.decode(base64.decode(encoded));
+    print('SHIFT ACCOUNT ${json}');
     return BOQShift.fromJson(json);
   }
 

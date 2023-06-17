@@ -45,12 +45,27 @@ class _BOQProfitabilityCalculatorState extends State<BOQProfitabilityCalculator>
     ),
   );
 
+  double _totalRewards({
+    required final int numberOfShifts,
+  }) {
+    final double lastTerm = kInflationRate * (numberOfShifts-1);
+    final double inflationRewards = (numberOfShifts / 2) * lastTerm;
+    return (kBaseRate*numberOfShifts)+inflationRewards;
+  }
+
+  double _shiftRate({
+    required final int numberOfShifts,
+  }) {
+    return numberOfShifts == 0 ? 0 : kBaseRate + ((numberOfShifts-1) * kInflationRate);
+  }
+
   @override
   Widget build(final BuildContext context) {
     final BOQPriceProvider priceProvider = context.watch<BOQPriceProvider>();
     final double? price = _price ?? priceProvider.value;
     final int? numberOfShifts = _numberOfShifts;
-    final rewards = price != null ? price * (kBaseRate + ((numberOfShifts ?? 0) * kBonusRate)) : null;
+    final rewards = price != null ? price*_shiftRate(numberOfShifts: numberOfShifts ?? 0) : null;
+    // final rewards = price != null ? price*_totalRewards(numberOfShifts: numberOfShifts ?? 1) : null;
     final rate = rewards != null ? formatCurrency(rewards) : null;
     return Form(
       child: Column(
@@ -58,17 +73,25 @@ class _BOQProfitabilityCalculatorState extends State<BOQProfitabilityCalculator>
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                '\$$rate',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              Flexible(
+                child: Text(
+                  '\$$rate',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
+              // const SizedBox(
+              //   height: 4.0,
+              // ),
               Text(
-                ' / shift',
+                '  |  shift rewards',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: BOQColors.theme.subtext
                 ),

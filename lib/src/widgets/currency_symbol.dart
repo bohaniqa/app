@@ -12,7 +12,9 @@ class BOQCurrencySymbol extends StatelessWidget {
 
   factory BOQCurrencySymbol.boq({
     final Color? color,
-  }) => const BOQCurrencySymbol();
+  }) => BOQCurrencySymbol(
+    color: color,
+  );
 
   factory BOQCurrencySymbol.sol({
     final Color? color,

@@ -1,10 +1,15 @@
+import 'dart:math' show max;
 import 'package:boq/src/consts.dart';
 import 'package:boq/src/fonts/icons.dart';
 import 'package:boq/src/program/state.dart';
+import 'package:boq/src/providers/supply.dart';
 import 'package:boq/src/screens/screen.dart';
 import 'package:boq/src/theme.dart';
+import 'package:boq/src/widgets/animated_number_card.dart';
 import 'package:boq/src/widgets/icon_badge.dart';
+import 'package:boq/src/widgets/list_tile.dart';
 import 'package:boq/src/widgets/number_card.dart';
+import 'package:boq/src/widgets/number_tile.dart';
 import 'package:boq/src/widgets/profitability_calculator.dart';
 import 'package:boq/src/widgets/section_title.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +86,7 @@ class BOQDashboardScreen extends StatelessWidget {
       await Future.wait([
         BOQPriceProvider.instance.update(provider),
         BOQAccountProvider.instance.update(provider),
+        // BOQSupplyProvider.instance.update(provider),
       ]);
     } catch (error) {
       final snackBar = SnackBar(
@@ -126,7 +132,7 @@ class BOQDashboardScreen extends StatelessWidget {
               ),
               _banner(
                 icon: BOQIcons.network,
-                description: 'Clock-in to mine $kTokenSymbol. A new shift begins every 24 hours.',
+                description: 'Clock-in to earn $kTokenSymbol. A new shift begins every 24 hours.',
                 color: BOQColors.theme.accent2,
               ),
               const SizedBox(
@@ -144,8 +150,8 @@ class BOQDashboardScreen extends StatelessWidget {
                   ),
                   _tile(
                     value: employer?.employees.toDouble(), 
-                    label: 'Active Miners',
-                    message: 'The number of miners in circulation out of a maximum $kCollectionSize.',
+                    label: 'Total Miners',
+                    message: 'The number of miners in circulation.',
                   ),
                 ],
               ),
@@ -163,11 +169,19 @@ class BOQDashboardScreen extends StatelessWidget {
                     width: kItemSpacing,
                   ),
                   _boqTile(
-                    value: kBonusRate, 
+                    value: kInflationRate, 
                     label: 'Inflation Rate',
                     message: 'The mining rewards increase per shift.',
                   ),
                 ],
+              ),
+
+              const SizedBox(
+                height: kItemSpacing,
+              ),
+
+              _BOQSupply(
+                employer: employer,
               ),
     
               const SizedBox(
@@ -195,6 +209,104 @@ class BOQDashboardScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+class _BOQTile extends StatelessWidget {
+  
+  const _BOQTile({
+    super.key,
+    required this.value,
+    required this.label,
+    required this.message,
+  });
+
+  final double? value;
+  final String label;
+  final String message;
+
+  @override
+  Widget build(final BuildContext context) => Expanded(
+    child: Tooltip(
+      message: message,
+      child: BOQNumberCard.boq(
+        value: value, 
+        label: label,
+        color: BOQColors.theme.accent2,
+      ),
+    ),
+  );
+}
+
+class _BOQSupply extends StatefulWidget {
+
+  const _BOQSupply({
+    super.key,
+    required this.employer,
+  });
+
+  final BOQEmployer? employer;
+
+  @override
+  State<_BOQSupply> createState() => __BOQSupplyState();
+}
+
+class __BOQSupplyState extends State<_BOQSupply> {
+
+  double? _maxSupply({
+    required final BOQEmployer? employer,
+    required final BOQSupply? supply,
+  }) {
+    if (employer == null || supply == null) {
+      return null;
+    }
+    final double shift = employer.shift(supply.slot.toBigInt());
+    final BigInt slotsPerShift = employer.slots_per_shift;
+    final double baseRatePerShift = fromTokenAmount(employer.base_rate_per_slot * slotsPerShift);
+    final double inflationRatePerShift = fromTokenAmount(employer.inflation_rate_per_slot * slotsPerShift);
+    final double lastTerm = inflationRatePerShift * (shift-1);
+    final double inflationRewards = (shift / 2) * lastTerm;
+    // print('MAX @ (${shift}) = ${(((baseRatePerShift*shift)+(inflationRewards)) * kCollectionSize)}');
+    return 149987500000 - (((baseRatePerShift*shift)+(inflationRewards)) * kCollectionSize);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final BOQSupplyProvider supplyProvider = context.watch<BOQSupplyProvider>();
+    final BOQSupply? supply = supplyProvider.value;
+    final double maxSupply = _maxSupply(employer: widget.employer, supply: supply) ?? 0.0;
+    return Column(
+      children: [
+        Tooltip(
+          message: 'The number of coins circulating in the market.',
+          child: BOQAnimatedCountCard(
+            count: tryFromTokenAmount(supply?.circulating)?.toInt() ?? 0, 
+            label: 'Circulating Supply',
+          ),
+          // child: BOQNumberCard.boq(
+          //   value: tryFromTokenAmount(supply?.circulating), 
+          //   label: 'Circulating Supply',
+          //   color: BOQColors.theme.accent2,
+          //   abbreviate: false,
+          // ),
+        ),
+        const SizedBox(
+          height: kItemSpacing,
+        ),
+        Tooltip(
+          message: 'The maximum number of coins that will ever exist.',
+          child: BOQAnimatedCountCard(
+            count: maxSupply.toInt(), 
+            label: 'Maximum Supply',
+          ),
+          // child: BOQNumberCard.boq(
+          //   value: maxSupply, 
+          //   label: 'Maximum Supply',
+          //   color: BOQColors.theme.accent2,
+          //   abbreviate: false,
+          // ),
+        ),
+      ],
     );
   }
 }

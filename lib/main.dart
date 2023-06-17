@@ -5,6 +5,7 @@ import 'package:boq/src/providers/price.dart';
 import 'package:boq/src/providers/provider.dart';
 import 'package:boq/src/providers/settings.dart';
 import 'package:boq/src/providers/account.dart';
+import 'package:boq/src/providers/supply.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
@@ -28,12 +29,14 @@ void main() async {
   //   BOQMinersProvider.instance.delete(),  
   //   BOQPriceProvider.instance.delete(), 
   //   BOQSettingsProvider.instance.delete(),  
+  //   BOQSupplyProvider.instance.delete(),  
   // ]);
 
   BOQAccountProvider.instance.load();
   BOQMinersProvider.instance.load();
   BOQPriceProvider.instance.load();
   BOQSettingsProvider.instance.load();
+  BOQSupplyProvider.instance.load();
 
   runApp(
     SolanaWalletProvider.create(
@@ -49,6 +52,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => BOQMinersProvider.instance),
           ChangeNotifierProvider(create: (context) => BOQPriceProvider.instance),
           ChangeNotifierProvider(create: (context) => BOQSettingsProvider.instance),
+          ChangeNotifierProvider(create: (context) => BOQSupplyProvider.instance),
         ],
         child: const BOQLoadState(),
       )
@@ -93,7 +97,7 @@ class _BOQLoadStateState extends State<BOQLoadState> {
     _initView(provider);
 
     final BOQSettingsProvider settingsProvider = context.watch<BOQSettingsProvider>();
-    final Brightness brightness = settingsProvider.value?.brightness ?? Brightness.light;
+    final Brightness brightness = settingsProvider.value?.brightness ?? Brightness.dark;
     final ThemeData theme = createThemeData(brightness);
     
     return MaterialApp(

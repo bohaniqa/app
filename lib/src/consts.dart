@@ -20,11 +20,17 @@ final kCandyMachineCreator = Pubkey.fromBase58('GoJE16iGSFsgUERqVou5BBBY88i9zB3a
 final kCollectionMintsURI = Uri.https('raw.githubusercontent.com', 'bohaniqa/bohaniqa.github.io/master/mints.json');
 const kCollectionSize = 10000;
 const kBaseRate = 250.0;
-const kBonusRate = 0.25;
+const kInflationRate = 0.25;
 const kMaxShifts = 10000;
+final kUnit = BigInt.from(pow(10, 8));
+const kSlotsPerShift = 250000;
 
-double fromTokenAmount(final BigInt value, [final int decimals = 8]) {
-  return value / pow(10, decimals).toBigInt();
+double fromTokenAmount(final BigInt value) {
+  return value / kUnit;
+}
+
+double? tryFromTokenAmount(final BigInt? value) {
+  return value != null ? fromTokenAmount(value) : null;
 }
 
 Future<void> fullUpdate(final SolanaWalletProvider provider) {

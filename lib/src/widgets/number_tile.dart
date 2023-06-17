@@ -11,6 +11,7 @@ class BOQNumberTile extends StatelessWidget {
     this.valueColor,
     this.labelColor,
     this.valueSuffix,
+    this.abbreviate = true,
   });
 
   final num? value;
@@ -18,6 +19,7 @@ class BOQNumberTile extends StatelessWidget {
   final Color? valueColor;
   final Color? labelColor;
   final Widget? valueSuffix;
+  final bool? abbreviate;
 
   @override
   Widget build(final BuildContext context) {
@@ -26,7 +28,9 @@ class BOQNumberTile extends StatelessWidget {
       fontWeight: FontWeight.bold,
       color: valueColor ?? BOQColors.theme.text,
     );
-    final String valueString = value != null ? abbreviateNumber(value!) : '-';
+    final String valueString = value != null 
+      ? (abbreviate != false ? abbreviateNumber(value!) : formatNumber(value!, dps: 0)) 
+      : '-';
     final Text title = Text(valueString, style: style);
     return Column(
       children: [
@@ -42,9 +46,11 @@ class BOQNumberTile extends StatelessWidget {
           : title,
         Text(
           label, 
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14.0,
             color: labelColor ?? BOQColors.theme.subtext,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],

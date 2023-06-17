@@ -200,7 +200,7 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
       children: [
         Flexible(child: _image(index)),
         const SizedBox(width: kItemSpacing),
-        Flexible(child: _image(index + 5000)),
+        Flexible(child: _image(index + 1)),
       ],
     );
   } 
@@ -270,10 +270,10 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(height: kSpacing),
-                    if (!noticeAcknowledged)
+                    if (isAuthorized && !noticeAcknowledged)
                       _notice(),
                     Expanded(
-                      child: miners != null
+                      child: miners != null && isAuthorized
                         ? ListView.separated(
                             itemCount: (miners.length / 2).round(),
                             itemBuilder: _itemBuilder,

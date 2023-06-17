@@ -26,10 +26,13 @@ class _BOQSettingsScreenState extends State<BOQSettingsScreen> {
   
   late Brightness _brightness;
 
+  late bool _forceShift;
+
   @override
   void initState() {
     super.initState();
-    _brightness = BOQSettingsProvider.instance.value?.brightness ?? Brightness.light;
+    _brightness = BOQSettingsProvider.instance.value?.brightness ?? Brightness.dark;
+    _forceShift = BOQSettingsProvider.instance.value?.forceShift ?? false;
   }
 
   void _onHelp() {
@@ -49,15 +52,24 @@ class _BOQSettingsScreenState extends State<BOQSettingsScreen> {
     launchUrl(Uri.https('twitter.com', 'bohaniqa')).ignore();
   }
 
-  bool _brightnessToBool(final Brightness? brightness) => brightness == Brightness.dark;
+  bool _brightnessToBool(final Brightness? brightness) => brightness != Brightness.light;
 
-  void _onTapSwitchTile() => _onSwitchChanged(!_brightnessToBool(_brightness));
+  void _onTapBrightnessTile() => _onBrightnessChanged(!_brightnessToBool(_brightness));
 
-  void _onSwitchChanged(final bool value) {
+  void _onBrightnessChanged(final bool value) {
     if (mounted) {
       final Brightness brightness = value ? Brightness.dark : Brightness.light;
       BOQSettingsProvider.instance.set(brightness: brightness);
       setState(() => _brightness = brightness);
+    }
+  }
+  
+  void _onTapForceShift() => _onForceShiftChanged(!_forceShift);
+
+  void _onForceShiftChanged(final bool value) {
+    if (mounted) {
+      BOQSettingsProvider.instance.set(forceShift: value);
+      setState(() => _forceShift = value);
     }
   }
 
@@ -78,10 +90,30 @@ class _BOQSettingsScreenState extends State<BOQSettingsScreen> {
           BOQListTile(
             title: 'Theme',
             subtitle: '${_brightness.name.capitalize()} Mode',
-            onTap: _onTapSwitchTile,
+            onTap: _onTapBrightnessTile,
             trailing: Switch(
-              onChanged: _onSwitchChanged,
+              onChanged: _onBrightnessChanged,
               value: _brightnessToBool(_brightness), 
+              activeColor: BOQColors.theme.background,
+            ),
+          ),
+
+          const SizedBox(
+            height: kSpacing,
+          ),
+          const BOQSectionTitle(
+            title: 'Shift',
+          ),
+          const SizedBox(
+            height: kSpacing,
+          ),
+          BOQListTile(
+            title: 'Clock-in',
+            subtitle: 'Always clock-in for a shift (not recommended).',
+            onTap: _onTapForceShift,
+            trailing: Switch(
+              onChanged: _onForceShiftChanged,
+              value: _forceShift, 
               activeColor: BOQColors.theme.background,
             ),
           ),
