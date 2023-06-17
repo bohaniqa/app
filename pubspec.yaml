@@ -51,6 +51,14 @@ flutter:
       fonts:
         - asset: assets/fonts/boq/BOQIcons.ttf
 
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Bold.ttf
+          weight: 700
+
+        - asset: assets/fonts/roboto/Roboto-Black.ttf
+          weight: 900
+
     - family: Rubik
       fonts:
         - asset: assets/fonts/rubik/Rubik-Light.ttf
