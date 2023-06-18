@@ -48,7 +48,7 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
   late bool _force;
 
   static const int _shiftsPerTx = 10;
-  static const int _txLimit = 10;
+  static const int _txLimit = 8;
 
   _BOQShiftState get state => _state;
   _BOQShiftState _state = _BOQShiftState.initialize;

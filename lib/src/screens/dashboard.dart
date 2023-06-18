@@ -1,4 +1,3 @@
-import 'dart:math' show max;
 import 'package:boq/src/consts.dart';
 import 'package:boq/src/fonts/icons.dart';
 import 'package:boq/src/program/state.dart';
@@ -7,9 +6,7 @@ import 'package:boq/src/screens/screen.dart';
 import 'package:boq/src/theme.dart';
 import 'package:boq/src/widgets/animated_number_card.dart';
 import 'package:boq/src/widgets/icon_badge.dart';
-import 'package:boq/src/widgets/list_tile.dart';
 import 'package:boq/src/widgets/number_card.dart';
-import 'package:boq/src/widgets/number_tile.dart';
 import 'package:boq/src/widgets/profitability_calculator.dart';
 import 'package:boq/src/widgets/section_title.dart';
 import 'package:flutter/material.dart';
@@ -212,10 +209,10 @@ class BOQDashboardScreen extends StatelessWidget {
     );
   }
 }
+
 class _BOQTile extends StatelessWidget {
   
   const _BOQTile({
-    super.key,
     required this.value,
     required this.label,
     required this.message,
@@ -241,7 +238,6 @@ class _BOQTile extends StatelessWidget {
 class _BOQSupply extends StatefulWidget {
 
   const _BOQSupply({
-    super.key,
     required this.employer,
   });
 
@@ -261,17 +257,14 @@ class __BOQSupplyState extends State<_BOQSupply> {
       return null;
     }
     final double shift = employer.shift(supply.slot.toBigInt());
-    final BigInt slotsPerShift = employer.slots_per_shift;
-    final double baseRatePerShift = fromTokenAmount(employer.base_rate_per_slot * slotsPerShift);
-    final double inflationRatePerShift = fromTokenAmount(employer.inflation_rate_per_slot * slotsPerShift);
-    final double lastTerm = inflationRatePerShift * (shift-1);
+    final double lastTerm = kInflationRate* (shift-1);
     final double inflationRewards = (shift / 2) * lastTerm;
-    // print('MAX @ (${shift}) = ${(((baseRatePerShift*shift)+(inflationRewards)) * kCollectionSize)}');
-    return 149987500000 - (((baseRatePerShift*shift)+(inflationRewards)) * kCollectionSize);
+    // print('MAX @ (${shift}) = ${(((baseRate*shift)+(inflationRewards)) * kCollectionSize)}');
+    return 149987500000 - (((kBaseRate*shift)+(inflationRewards)) * kCollectionSize);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final BOQSupplyProvider supplyProvider = context.watch<BOQSupplyProvider>();
     final BOQSupply? supply = supplyProvider.value;
     final double maxSupply = _maxSupply(employer: widget.employer, supply: supply) ?? 0.0;
@@ -294,7 +287,7 @@ class __BOQSupplyState extends State<_BOQSupply> {
           height: kItemSpacing,
         ),
         Tooltip(
-          message: 'The maximum number of coins that will ever exist.',
+          message: 'The maximum number of coins that will ever exist. Decreases with every missed shift.',
           child: BOQAnimatedCountCard(
             count: maxSupply.toInt(), 
             label: 'Maximum Supply',
