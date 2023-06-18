@@ -223,17 +223,27 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
     final responses = (await connection.sendAll(builder))
       .expand((response) => (response as JsonRpcSuccessResponse).result.value)
       .toList(growable: false);
+    BigInt ts = BigInt.zero;
     for (int i = 0; i < responses.length; ++i) {
       final AccountInfo? accountInfo = responses[i];
       if (accountInfo != null) {
         final BOQEmployee employee = BOQEmployee.fromBase64(accountInfo.binaryData);
         _debugRate(slot: slot, employer: employer, employee: employee, extraShifts: BigInt.from(3));
+        ts += employee.total_slots;
         if (_force || employee.last_slot < updateThreshold) {
           accounts.add(tokens[i]);
           accounts.add(employees[i]);
         }
       }
     }
+    print('**********');
+    print('TOTAL EMPLOYEE SLOTS = $ts');
+    print('**********');
+
+    print('**********');
+    print('EMPLOYEER BASE RATE = ${employer.base_rate_per_slot}');
+    print('EMPLOYEER INFL RATE = ${employer.inflation_rate_per_slot}');
+    print('**********');
     return accounts;
   }
 
