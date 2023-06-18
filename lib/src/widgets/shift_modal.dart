@@ -342,7 +342,9 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
             )
           );
         }
+        print('WAIT NOTIFICATION...');
         await Future.wait(notifications, eagerError: true);
+        print('UPDATE ACCOUNT...');
         BOQAccountProvider.instance.update(provider).ignore();
         _message = "See you tomorrow!";
         state = _BOQShiftState.success;
