@@ -327,11 +327,14 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
           final List<String> encodedTxs = txChunks
             .map(provider.adapter.encodeTransaction)
             .toList(growable: false);
+          print('\n--------------------------------------------------------------\nTXS $encodedTxs');
           final result = await provider.adapter.signTransactions(encodedTxs);
+          print('SIGNED TXS ${result.signedPayloads}');
           final signatures = await provider.connection.sendSignedTransactions(
             result.signedPayloads, 
             eagerError: true,
           );
+          print('SIGNATURES TXS $signatures');
           notifications.addAll(signatures.map(
             (signature) => signature != null 
               ? provider.connection.confirmTransaction(signature)
