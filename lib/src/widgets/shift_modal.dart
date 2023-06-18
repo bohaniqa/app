@@ -6,6 +6,7 @@ import 'package:boq/src/providers/miners.dart';
 import 'package:boq/src/providers/settings.dart';
 import 'package:boq/src/theme.dart';
 import 'package:boq/src/widgets/icon_badge.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:solana_wallet_provider/solana_wallet_provider.dart';
 import '../program/program.dart';
@@ -48,7 +49,7 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
   late bool _force;
 
   static const int _shiftsPerTx = 10;
-  static const int _txLimit = 8;
+  static const int _txLimit = kIsWeb ? 1 : 10;
 
   _BOQShiftState get state => _state;
   _BOQShiftState _state = _BOQShiftState.initialize;
@@ -327,14 +328,11 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
           final List<String> encodedTxs = txChunks
             .map(provider.adapter.encodeTransaction)
             .toList(growable: false);
-          print('\n--------------------------------------------------------------\nTXS $encodedTxs');
           final result = await provider.adapter.signTransactions(encodedTxs);
-          print('SIGNED TXS ${result.signedPayloads}');
           final signatures = await provider.connection.sendSignedTransactions(
             result.signedPayloads, 
             eagerError: true,
           );
-          print('SIGNATURES TXS $signatures');
           notifications.addAll(signatures.map(
             (signature) => signature != null 
               ? provider.connection.confirmTransaction(signature)
@@ -342,9 +340,8 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
             )
           );
         }
-        print('WAIT NOTIFICATION...');
+        
         await Future.wait(notifications, eagerError: true);
-        print('UPDATE ACCOUNT...');
         BOQAccountProvider.instance.update(provider).ignore();
         _message = "See you tomorrow!";
         state = _BOQShiftState.success;
