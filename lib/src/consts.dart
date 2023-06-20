@@ -10,13 +10,16 @@ const String kTokenSymbol = 'BOQ';
 const double kSpacing = 24.0;
 const double kItemSpacing = 8.0;
 
-final kCluster = Cluster.devnet;
+final kCluster = Cluster.mainnet;
 
-final kTokenMint = Pubkey.fromBase58('6VL54oH9h56D9dsXWJpg8VF1jsuf8SWHamVg2DuSuP1f');
+// final kTokenMint = Pubkey.fromBase58('6VL54oH9h56D9dsXWJpg8VF1jsuf8SWHamVg2DuSuP1f'); // dev
+final kTokenMint = Pubkey.fromBase58('FWzs6NG9xaiGkSTqzU6d4n8BDd8bUpf2uHBQ9iu4HkUo'); // main
 final kTokenMetadata = MetaplexTokenMetadataProgram.findMetadataAddress(kTokenMint);
-final kCollectionMint = Pubkey.fromBase58('CBHkXSbvsV1BLSzUcDvYydYp5RjEbwGpSYDhazqnCNVr');
+// final kCollectionMint = Pubkey.fromBase58('CBHkXSbvsV1BLSzUcDvYydYp5RjEbwGpSYDhazqnCNVr'); // dev
+final kCollectionMint = Pubkey.fromBase58('ArHNsvzrXhvNB5YwhfzxQfZukF44Pupsk2vTejGSpi1H'); // main
 final kCollectionMetadata = MetaplexTokenMetadataProgram.findMetadataAddress(kCollectionMint);
-final kCandyMachineCreator = Pubkey.fromBase58('GoJE16iGSFsgUERqVou5BBBY88i9zB3aMZSimuLCWrC5');
+// final kCandyMachineCreator = Pubkey.fromBase58('GoJE16iGSFsgUERqVou5BBBY88i9zB3aMZSimuLCWrC5'); // dev
+final kCandyMachineCreator = Pubkey.fromBase58('Ha9dPhnKFfpunZLtVu9t6vpGYdyJHJj6NJQFiQXRPt4R'); // main
 final kCollectionMintsURI = Uri.https('raw.githubusercontent.com', 'bohaniqa/bohaniqa.github.io/master/mints.json');
 const kCollectionSize = 10000;
 const kBaseRate = 250.0;
