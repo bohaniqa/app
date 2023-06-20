@@ -47,7 +47,7 @@ class _BOQAppState extends State<BOQApp> {
       if (index == _dashboardIndex) {
         _refreshSupply(_timer);
         _timer = Timer.periodic(
-          const Duration(seconds: 5), 
+          const Duration(seconds: 60), 
           _refreshSupply
         );
       } else {

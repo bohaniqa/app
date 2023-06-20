@@ -13,7 +13,7 @@ class BOQPriceProvider extends BOQProvider<double> {
 
   @override
   Future<double>? query(final SolanaWalletProvider provider) 
-    => Future.value(0.1);
+    => Future.value(null);
 
   @override
   double? read(final SharedPreferences prefs) => prefs.getDouble(key);

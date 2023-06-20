@@ -9,6 +9,7 @@ import 'package:boq/src/widgets/icon_badge.dart';
 import 'package:boq/src/widgets/number_card.dart';
 import 'package:boq/src/widgets/profitability_calculator.dart';
 import 'package:boq/src/widgets/section_title.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solana_wallet_provider/solana_wallet_provider.dart';
@@ -83,7 +84,7 @@ class BOQDashboardScreen extends StatelessWidget {
       await Future.wait([
         BOQPriceProvider.instance.update(provider),
         BOQAccountProvider.instance.update(provider),
-        // BOQSupplyProvider.instance.update(provider),
+        // if (kIsWeb) BOQSupplyProvider.instance.update(provider),
       ]);
     } catch (error) {
       final snackBar = SnackBar(

@@ -2,6 +2,7 @@ import 'dart:math' show pow;
 import 'package:boq/src/providers/account.dart';
 import 'package:boq/src/providers/miners.dart';
 import 'package:boq/src/providers/price.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:solana_wallet_provider/solana_wallet_provider.dart';
 
 const String kFontFamily = 'Rubik';
@@ -10,7 +11,9 @@ const String kTokenSymbol = 'BOQ';
 const double kSpacing = 24.0;
 const double kItemSpacing = 8.0;
 
-final kCluster = Cluster.mainnet;
+final kCluster = kIsWeb 
+  ? Cluster(Uri.https('solana-mainnet.g.alchemy.com', 'v2/7bBFOKctvSUjOaKWnEX6_vG4iPUPVKcW'))
+  : Cluster.mainnet;
 
 // final kTokenMint = Pubkey.fromBase58('6VL54oH9h56D9dsXWJpg8VF1jsuf8SWHamVg2DuSuP1f'); // dev
 final kTokenMint = Pubkey.fromBase58('FWzs6NG9xaiGkSTqzU6d4n8BDd8bUpf2uHBQ9iu4HkUo'); // main

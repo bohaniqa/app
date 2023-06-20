@@ -67,6 +67,14 @@ class BOQAccountProvider extends BOQProvider<BOQAccount> {
     }
   }
 
+  T? _unwrapResponse<T>(final JsonRpcResponse response) {
+    if (response is JsonRpcSuccessResponse) {
+      return response.result;
+    } else {
+      return null;
+    }
+  }
+
   @override
   Future<BOQAccount>? query(final SolanaWalletProvider provider) async {
     TokenAmount? tokenAmount;
@@ -86,7 +94,7 @@ class BOQAccountProvider extends BOQProvider<BOQAccount> {
       tokenAmount = _unwrapResponseContext(responses[0]);
       employerAccount = _unwrapResponseContext(responses[1]);
       shiftAccount = _unwrapResponseContext(responses[2]);
-      slot = (responses[3] as JsonRpcSuccessResponse).result as int;
+      slot = _unwrapResponse(responses[3]);
     } else {
       final builder = JsonRpcMethodBuilder<dynamic, dynamic>([
         GetAccountInfo(employerPubkey),
@@ -94,7 +102,7 @@ class BOQAccountProvider extends BOQProvider<BOQAccount> {
       ]);
       final responses = await provider.connection.sendAll(builder);
       employerAccount = _unwrapResponseContext(responses[0]);
-      slot = (responses[1] as JsonRpcSuccessResponse).result as int;
+      slot = _unwrapResponse(responses[3]);
     }
     return BOQAccount(
       amount: tokenAmount?.amount,
