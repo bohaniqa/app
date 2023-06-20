@@ -12,9 +12,11 @@ import 'package:boq/src/widgets/currency_symbol.dart';
 import 'package:boq/src/widgets/icon_badge.dart';
 import 'package:boq/src/widgets/number_tile.dart';
 import 'package:boq/src/widgets/shift_modal.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solana_wallet_provider/solana_wallet_provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class BOQHomeScreen extends StatefulWidget {
   const BOQHomeScreen({super.key});
@@ -24,6 +26,24 @@ class BOQHomeScreen extends StatefulWidget {
 }
 
 class _BOQHomeScreenState extends State<BOQHomeScreen> {
+
+  final TapGestureRecognizer _twitterLink = TapGestureRecognizer();
+  final TapGestureRecognizer _discordLink = TapGestureRecognizer();
+  final TapGestureRecognizer _mintLink = TapGestureRecognizer();
+  @override
+  void initState() {
+    super.initState();
+    _twitterLink.onTap = () => launchUrlString('https://twitter.com/bohaniqa').ignore();
+    _discordLink.onTap = () => launchUrlString('https://discord.gg/Ht2g2fRQbs').ignore();
+    _mintLink.onTap = () => launchUrlString('https://mint.bohaniqa.com').ignore();
+  }
+  @override
+  void dispose() {
+    _twitterLink.dispose();
+    _discordLink.dispose();
+    _mintLink.dispose();
+    super.dispose();
+  }
 
   Future<void> _clockIn() async {
     final provider = SolanaWalletProvider.of(context);
@@ -133,10 +153,22 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
         ),
         child: Row(
           children: [
-            const Expanded(
-              child: Text(
-                'It can take up to 24 hours for a newly minted miner to appear.',
-                style: TextStyle(fontWeight: FontWeight.w500),
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  text: "It can take up to 24 hours for a newly minted miner to appear. Don't have a miner? ",
+                  children: [
+                    TextSpan(
+                      text: "Mint now",
+                      style: TextStyle(color: BOQColors.theme.accent1),
+                      recognizer: _mintLink,
+                    ),
+                    const TextSpan(
+                      text: "."
+                    ),
+                  ]
+                ),
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
             ),
             const SizedBox(
@@ -316,16 +348,53 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
               ),
               if (isAuthorized)
                 Positioned(
-                  right: kItemSpacing, bottom: kItemSpacing,
-                  child: OutlinedButton(
-                    onPressed: _clockIn, 
-                    style: OutlinedButton.styleFrom(
-                      fixedSize: const Size.fromRadius(buttonRadius),
-                    ),
-                    child: const Icon(
-                      BOQIcons.clock, 
-                      size: 24,
-                    ),
+                  left: kItemSpacing, 
+                  right: kItemSpacing, 
+                  bottom: kItemSpacing,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(24.0),
+                            child: Text.rich(
+                              TextSpan(
+                                text: 'The shift program will go live soon. Follow us on ',
+                                children: [
+                                  TextSpan(
+                                    text: 'Twitter',
+                                    style: TextStyle(color: BOQColors.theme.accent1),
+                                    recognizer: _twitterLink,
+                                  ),
+                                  TextSpan(text: ' or '),
+                                  TextSpan(
+                                    text: 'Discord',  
+                                    style: TextStyle(color: BOQColors.theme.accent1),
+                                    recognizer: _discordLink,
+                                  ),
+                                  TextSpan(text: ' for the announcement.'),
+                                ]
+                              ),
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 16.0,
+                      ),
+                      OutlinedButton(
+                        onPressed: null, //_clockIn, 
+                        style: OutlinedButton.styleFrom(
+                          fixedSize: const Size.fromRadius(buttonRadius),
+                          disabledBackgroundColor: BOQColors.theme.placeholder,
+                        ),
+                        child: const Icon(
+                          BOQIcons.clock, 
+                          size: 24,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
            ],

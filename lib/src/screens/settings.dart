@@ -109,7 +109,7 @@ class _BOQSettingsScreenState extends State<BOQSettingsScreen> {
           ),
           BOQListTile(
             title: 'Clock-in',
-            subtitle: 'Always clock-in for a shift (not recommended).',
+            subtitle: 'Enable continuous clock-in.',
             onTap: _onTapForceShift,
             trailing: Switch(
               onChanged: _onForceShiftChanged,
