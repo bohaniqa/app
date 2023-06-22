@@ -87,6 +87,9 @@ class _BOQLoadStateState extends State<BOQLoadState> {
     if (provider.isAuthorized) {
       BOQAccountProvider.instance.update(provider).ignore();
       BOQMinersProvider.instance.update(provider).ignore();
+    } else {
+      BOQAccountProvider.instance.delete().ignore();
+      BOQMinersProvider.instance.delete().ignore();
     }
   }
 

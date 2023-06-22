@@ -276,6 +276,7 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
     final BOQPriceProvider priceProvider = context.watch<BOQPriceProvider>();
     final double? price = priceProvider.value;
     final bool noticeAcknowledged = BOQSettingsProvider.instance.value?.minerNotice ?? false;
+    final bool isLive = (account?.slot ?? 0) >= 201250000;
     return RefreshIndicator(
       displacement: kSpacing * 2.0,
       color: BOQColors.theme.accent1,
@@ -352,39 +353,42 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
                   right: kItemSpacing, 
                   bottom: kItemSpacing,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Expanded(
-                        child: Card(
-                          child: Padding(
-                            padding: EdgeInsets.all(24.0),
-                            child: Text.rich(
-                              TextSpan(
-                                text: 'The shift program will go live soon. Follow us on ',
-                                children: [
-                                  TextSpan(
-                                    text: 'Twitter',
-                                    style: TextStyle(color: BOQColors.theme.accent1),
-                                    recognizer: _twitterLink,
-                                  ),
-                                  TextSpan(text: ' or '),
-                                  TextSpan(
-                                    text: 'Discord',  
-                                    style: TextStyle(color: BOQColors.theme.accent1),
-                                    recognizer: _discordLink,
-                                  ),
-                                  TextSpan(text: ' for the announcement.'),
-                                ]
+                      if (!isLive)
+                        Expanded(
+                          child: Card(
+                            child: Padding(
+                              padding: EdgeInsets.all(24.0),
+                              child: Text.rich(
+                                TextSpan(
+                                  text: 'The shift program goes live June 23rd. Follow us on ',
+                                  children: [
+                                    TextSpan(
+                                      text: 'Twitter',
+                                      style: TextStyle(color: BOQColors.theme.accent1),
+                                      recognizer: _twitterLink,
+                                    ),
+                                    TextSpan(text: ' or '),
+                                    TextSpan(
+                                      text: 'Discord',  
+                                      style: TextStyle(color: BOQColors.theme.accent1),
+                                      recognizer: _discordLink,
+                                    ),
+                                    TextSpan(text: ' for the official announcement.'),
+                                  ]
+                                ),
+                                style: TextStyle(fontWeight: FontWeight.w500),
                               ),
-                              style: TextStyle(fontWeight: FontWeight.w500),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 16.0,
-                      ),
+                      if (!isLive)
+                        SizedBox(
+                          width: 16.0,
+                        ),
                       OutlinedButton(
-                        onPressed: null, //_clockIn, 
+                        onPressed: isLive ? _clockIn : null, 
                         style: OutlinedButton.styleFrom(
                           fixedSize: const Size.fromRadius(buttonRadius),
                           disabledBackgroundColor: BOQColors.theme.placeholder,

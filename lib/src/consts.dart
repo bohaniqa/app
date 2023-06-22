@@ -11,11 +11,12 @@ const String kTokenSymbol = 'BOQ';
 const double kSpacing = 24.0;
 const double kItemSpacing = 8.0;
 
+// final kCluster = Cluster.devnet; // dev
 final kCluster = kIsWeb 
   ? Cluster(Uri.https('solana-mainnet.g.alchemy.com', 'v2/7bBFOKctvSUjOaKWnEX6_vG4iPUPVKcW'))
-  : Cluster.mainnet;
+  : Cluster.mainnet; // main
 
-// final kTokenMint = Pubkey.fromBase58('6VL54oH9h56D9dsXWJpg8VF1jsuf8SWHamVg2DuSuP1f'); // dev
+// final kTokenMint = Pubkey.fromBase58('66V5fdwnNTEXxJFuiWsMTWo2e6QZymnXAhBo2NbZWCsY'); // dev
 final kTokenMint = Pubkey.fromBase58('FWzs6NG9xaiGkSTqzU6d4n8BDd8bUpf2uHBQ9iu4HkUo'); // main
 final kTokenMetadata = MetaplexTokenMetadataProgram.findMetadataAddress(kTokenMint);
 // final kCollectionMint = Pubkey.fromBase58('CBHkXSbvsV1BLSzUcDvYydYp5RjEbwGpSYDhazqnCNVr'); // dev
