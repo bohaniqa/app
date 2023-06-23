@@ -247,34 +247,46 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
     return accounts;
   }
 
-  Future<List<Transaction>> _createTxs(
+  List<TransactionInstruction> _createTxIxs(
     final Connection connection, {
     required final Pubkey wallet,
     required final Pubkey employerPubkey,
     required final Pubkey shiftPubkey,
     required final List<Pubkey> nftsAndEmployeePairs,
-  }) async {
+  }) {
     const int accountsPerTx = _shiftsPerTx * 2;
-    final List<Transaction> txs = [];
+    final List<TransactionInstruction> ixs = [];
     final Pubkey mintAuthority = BOQShiftProgram.findMintAuthority().pubkey;
     final Pubkey ataAccount = Pubkey.findAssociatedTokenAddress(wallet, kTokenMint).pubkey;
     final List<List<Pubkey>> accounts = _chunk(nftsAndEmployeePairs, size: accountsPerTx);
-    final blockhash = await connection.getLatestBlockhash();
     for (final List<Pubkey> nftsAndEmployeePairs in accounts) {
+      ixs.add(
+        BOQShiftProgram.shift(
+          mintAuthority: mintAuthority,
+          employer: employerPubkey,
+          shift: shiftPubkey,
+          tokenMint: kTokenMint,
+          ataAccount: ataAccount,
+          nftsAndEmployees: nftsAndEmployeePairs,
+        ),
+      );
+    }
+    return ixs;
+  }
+
+  Future<List<Transaction>> _createTxs(
+    final Connection connection, {
+    required final Pubkey wallet,
+    required final List<TransactionInstruction> txInstructions,
+  }) async {
+    final txs = <Transaction>[];
+    final recentBlockhash = await connection.getLatestBlockhash();
+    for (final TransactionInstruction txIx in txInstructions) {
       txs.add(
         Transaction.v0(
           payer: wallet, 
-          recentBlockhash: blockhash.blockhash,
-          instructions: [
-            BOQShiftProgram.shift(
-              mintAuthority: mintAuthority,
-              employer: employerPubkey,
-              shift: shiftPubkey,
-              tokenMint: kTokenMint,
-              ataAccount: ataAccount,
-              nftsAndEmployees: nftsAndEmployeePairs,
-            ),
-          ], 
+          instructions: [txIx], 
+          recentBlockhash: recentBlockhash.blockhash,
         ),
       );
     }
@@ -325,17 +337,22 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
         _message = 'Your miners are up to date.';
         state = _BOQShiftState.success;
       } else {
-        final List<Transaction> txs = await _createTxs(
+        final List<TransactionInstruction> txIxs = _createTxIxs(
           provider.connection, 
           wallet: wallet, 
           employerPubkey: employerPubkey, 
           shiftPubkey: shiftPubkey, 
           nftsAndEmployeePairs: nftsAndEmployeePairs,
         );
-        final List<List<Transaction>> txList = _chunk(txs, size: _txLimit);
+        final List<List<TransactionInstruction>> txIxsList = _chunk(txIxs, size: _txLimit);
         final List<Future<SignatureNotification>> notifications = [];
-        for (final List<Transaction> txChunks in txList) {
-          final List<String> encodedTxs = txChunks
+        for (final List<TransactionInstruction> txIxsChunks in txIxsList) {
+          final List<Transaction> txs = await _createTxs(
+            provider.connection, 
+            wallet: wallet, 
+            txInstructions: txIxsChunks,
+          );
+          final List<String> encodedTxs = txs
             .map(provider.adapter.encodeTransaction)
             .toList(growable: false);
           final result = await provider.adapter.signTransactions(encodedTxs);
