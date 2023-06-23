@@ -32,7 +32,6 @@ class _BOQAppState extends State<BOQApp> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
-  
   }
 
   final List<Widget> _pages = const [

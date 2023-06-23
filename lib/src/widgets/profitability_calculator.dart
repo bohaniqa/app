@@ -64,7 +64,7 @@ class _BOQProfitabilityCalculatorState extends State<BOQProfitabilityCalculator>
     final BOQPriceProvider priceProvider = context.watch<BOQPriceProvider>();
     final double? price = _price ?? priceProvider.value;
     final int? numberOfShifts = _numberOfShifts;
-    final rewards = price != null ? price*_shiftRate(numberOfShifts: numberOfShifts ?? 0) : null;
+    final rewards = price != null ? price*_shiftRate(numberOfShifts: numberOfShifts ?? 1) : null;
     // final rewards = price != null ? price*_totalRewards(numberOfShifts: numberOfShifts ?? 1) : null;
     final rate = rewards != null ? formatCurrency(rewards) : null;
     return Form(
@@ -77,7 +77,7 @@ class _BOQProfitabilityCalculatorState extends State<BOQProfitabilityCalculator>
             children: [
               Flexible(
                 child: Text(
-                  '\$$rate',
+                  '\$${rate ?? '0.0'}',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 20,
