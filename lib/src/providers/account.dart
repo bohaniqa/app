@@ -102,7 +102,7 @@ class BOQAccountProvider extends BOQProvider<BOQAccount> {
       ]);
       final responses = await provider.connection.sendAll(builder);
       employerAccount = _unwrapResponseContext(responses[0]);
-      slot = _unwrapResponse(responses[3]);
+      slot = _unwrapResponse(responses[1]);
     }
     return BOQAccount(
       amount: tokenAmount?.amount,
