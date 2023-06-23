@@ -82,7 +82,7 @@ class BOQMinersProvider extends BOQProvider<Map<String, BOQMiner>> {
     final Map<String, BOQMiner> miners = {};
     for (final tokenAccount in tokenAccounts) {
       final token = TokenAccountInfo.fromAccountInfo(tokenAccount.account);
-      if (mintedTokens.containsKey(token.mint)) {
+      if (mintedTokens.containsKey(token.mint) && token.amount == BigInt.one) {
         miners[token.mint] = BOQMiner(
           id: mintedTokens[token.mint]!, 
           token: tokenAccount.pubkey,
