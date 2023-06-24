@@ -6,7 +6,6 @@ import 'package:boq/src/providers/miners.dart';
 import 'package:boq/src/providers/settings.dart';
 import 'package:boq/src/theme.dart';
 import 'package:boq/src/widgets/icon_badge.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:solana_wallet_provider/solana_wallet_provider.dart';
 import '../program/program.dart';
@@ -49,7 +48,7 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
   late bool _force;
 
   static const int _shiftsPerTx = 10;
-  static const int _txLimit = kIsWeb ? 1 : 10;
+  static const int _txLimit = 10;
 
   _BOQShiftState get state => _state;
   _BOQShiftState _state = _BOQShiftState.initialize;
