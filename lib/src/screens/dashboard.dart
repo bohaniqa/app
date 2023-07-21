@@ -141,7 +141,7 @@ class BOQDashboardScreen extends StatelessWidget {
                   _tile(
                     value: shiftHeight?.toInt(), 
                     label: 'Total Shifts',
-                    message: 'The number of completed shifs.',
+                    message: 'Number of completed shifs.',
                   ),
                   const SizedBox(
                     width: kItemSpacing,
@@ -149,7 +149,7 @@ class BOQDashboardScreen extends StatelessWidget {
                   _tile(
                     value: employer?.employees.toDouble(), 
                     label: 'Total Miners',
-                    message: 'The number of miners in circulation.',
+                    message: 'Number of miners in circulation.',
                   ),
                 ],
               ),
@@ -161,7 +161,7 @@ class BOQDashboardScreen extends StatelessWidget {
                   _boqTile(
                     value: kBaseRate, 
                     label: 'Base Rate',
-                    message: 'The minimum mining rewards per shift.',
+                    message: 'Minimum mining rewards per shift.',
                   ),
                   const SizedBox(
                     width: kItemSpacing,
@@ -169,7 +169,7 @@ class BOQDashboardScreen extends StatelessWidget {
                   _boqTile(
                     value: kInflationRate, 
                     label: 'Inflation Rate',
-                    message: 'The mining rewards increase per shift.',
+                    message: 'Mining rewards increase per shift.',
                   ),
                 ],
               ),
