@@ -104,7 +104,7 @@ class _BOQLoadStateState extends State<BOQLoadState> {
     final ThemeData theme = createThemeData(brightness);
     
     return MaterialApp(
-      title: '$kAppName App',
+      title: '$kAppName - App',
       debugShowCheckedModeBanner: false,
       theme: theme,
       home: ColoredBox(

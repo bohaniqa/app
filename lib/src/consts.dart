@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:solana_wallet_provider/solana_wallet_provider.dart';
 
 const String kFontFamily = 'Rubik';
-const String kAppName = 'BOHANIQA';
+const String kAppName = 'Bohaniqa';
 const String kTokenSymbol = 'BOQ';
 const double kSpacing = 24.0;
 const double kItemSpacing = 8.0;
