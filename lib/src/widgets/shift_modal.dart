@@ -354,8 +354,12 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
             .map(provider.adapter.encodeTransaction)
             .toList(growable: false);
           final result = await provider.adapter.signTransactions(encodedTxs);
-          final signatures = await provider.connection.sendSignedTransactions(
-            result.signedPayloads, 
+          // final signatures = await provider.connection.sendSignedTransactions(
+          //   result.signedPayloads, 
+          //   eagerError: true,
+          // );
+          final signatures = await Future.wait(
+            result.signedPayloads.map(provider.connection.sendSignedTransaction),
             eagerError: true,
           );
           notifications.addAll(signatures.map(
