@@ -84,19 +84,16 @@ class BOQAccountProvider extends BOQProvider<BOQAccount> {
     final wallet = provider.connectedAccount?.toPubkey();
     final employerPubkey = BOQShiftProgram.findEmployer().pubkey;
     if (wallet != null) {
-      final builder = JsonRpcMethodBuilder<dynamic, dynamic>([
-        GetTokenAccountBalance(Pubkey.findAssociatedTokenAddress(wallet, kTokenMint).pubkey),
-        GetSlot(),
-      ]);
-      final responses = await provider.connection.sendAll(builder);
-      tokenAmount = _unwrapResponseContext(responses[0]);
-      slot = _unwrapResponse(responses[1]);
-      final accountResponses = await Future.wait([
+      final responses = await Future.wait<dynamic>([
         provider.connection.getAccountInfo(employerPubkey),
-        provider.connection.getAccountInfo(BOQShiftProgram.findShift(wallet).pubkey)
+        provider.connection.getAccountInfo(BOQShiftProgram.findShift(wallet).pubkey),
+        provider.connection.getTokenAccountBalance(Pubkey.findAssociatedTokenAddress(wallet, kTokenMint).pubkey),
+        provider.connection.getSlot(),
       ]);
-      employerAccount = accountResponses[0];
-      shiftAccount = accountResponses[1];
+      employerAccount = responses[0];
+      shiftAccount = responses[1];
+      tokenAmount = responses[2] as TokenAmount;
+      slot = responses[3] as int;
     } else {
       final responses = await Future.wait<dynamic>([
         provider.connection.getAccountInfo(employerPubkey),
