@@ -31,6 +31,7 @@ const kInflationRate = 0.25;
 const kMaxShifts = 10000;
 final kUnit = BigInt.from(pow(10, 8));
 const kSlotsPerShift = 250000;
+const kMaxSupply = 149987500000;
 
 double fromTokenAmount(final BigInt value) {
   return value / kUnit;

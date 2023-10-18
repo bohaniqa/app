@@ -36,13 +36,12 @@ class BOQSupplyProvider extends BOQProvider<BOQSupply> {
 
   @override
   Future<BOQSupply>? query(final SolanaWalletProvider provider) async {
-    final builder = JsonRpcMethodBuilder<dynamic, dynamic>([
-      GetSlot(),
-      GetTokenSupply(kTokenMint)
+    final responses = await Future.wait<dynamic>([
+      provider.connection.getSlot(),
+      provider.connection.getTokenSupply(kTokenMint),
     ]);
-    final responses = await provider.connection.sendAll(builder);
-    final int slot = (responses[0] as JsonRpcSuccessResponse).result as int;
-    final TokenAmount data = (responses[1] as JsonRpcSuccessResponse).result!.value;
+    final int slot = responses[0] as int;
+    final TokenAmount data = responses[1] as TokenAmount;
     return BOQSupply(
       slot: slot, 
       circulating: data.amount,

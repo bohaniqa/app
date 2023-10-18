@@ -362,7 +362,7 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
                               padding: EdgeInsets.all(24.0),
                               child: Text.rich(
                                 TextSpan(
-                                  text: 'The shift program goes live June 23rd. Follow us on ',
+                                  text: 'Failed to load account information. Follow us on ',
                                   children: [
                                     TextSpan(
                                       text: 'Twitter',
@@ -375,7 +375,7 @@ class _BOQHomeScreenState extends State<BOQHomeScreen> {
                                       style: TextStyle(color: BOQColors.theme.accent1),
                                       recognizer: _discordLink,
                                     ),
-                                    TextSpan(text: ' for the official announcement.'),
+                                    TextSpan(text: ' for updates.'),
                                   ]
                                 ),
                                 style: TextStyle(fontWeight: FontWeight.w500),

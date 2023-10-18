@@ -261,7 +261,7 @@ class __BOQSupplyState extends State<_BOQSupply> {
     final double lastTerm = kInflationRate* (shift-1);
     final double inflationRewards = (shift / 2) * lastTerm;
     // print('MAX @ (${shift}) = ${(((baseRate*shift)+(inflationRewards)) * kCollectionSize)}');
-    return 149987500000 - (((kBaseRate*shift)+(inflationRewards)) * kCollectionSize);
+    return kMaxSupply - (((kBaseRate*shift)+(inflationRewards)) * kCollectionSize);
   }
 
   @override
