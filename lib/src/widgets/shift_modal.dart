@@ -216,22 +216,21 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
   }) async {
     final List<Pubkey> accounts = [];
     final BigInt updateThreshold = slot - (employer.slots_per_shift ~/ BigInt.two);
-    final builder = JsonRpcMethodBuilder(_chunk(employees, size: 100)
-      .map(GetMultipleAccounts.map)
-      .toList(growable: false));
-    final responses = (await connection.sendAll(builder))
-      .expand((response) => (response as JsonRpcSuccessResponse).result.value)
-      .toList(growable: false);
+    final pubkeyChubks = _chunk(employees, size: 100);
+    final calls = pubkeyChubks.map((e) => connection.getMultipleAccounts(e));
+    final responses = (await Future.wait(calls));
     BigInt ts = BigInt.zero;
-    for (int i = 0; i < responses.length; ++i) {
-      final AccountInfo? accountInfo = responses[i];
-      if (accountInfo != null) {
-        final BOQEmployee employee = BOQEmployee.fromBase64(accountInfo.binaryData);
-        _debugRate(slot: slot, employer: employer, employee: employee, extraShifts: BigInt.from(3));
-        ts += employee.total_slots;
-        if (_force || employee.last_slot < updateThreshold) {
-          accounts.add(tokens[i]);
-          accounts.add(employees[i]);
+    for (final response in responses) {
+      for (int i = 0; i < response.length; ++i) {
+        final AccountInfo? accountInfo = response[i];
+        if (accountInfo != null) {
+          final BOQEmployee employee = BOQEmployee.fromBase64(accountInfo.binaryData);
+          _debugRate(slot: slot, employer: employer, employee: employee, extraShifts: BigInt.from(3));
+          ts += employee.total_slots;
+          if (_force || employee.last_slot < updateThreshold) {
+            accounts.add(tokens[i]);
+            accounts.add(employees[i]);
+          }
         }
       }
     }

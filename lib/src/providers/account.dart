@@ -90,8 +90,8 @@ class BOQAccountProvider extends BOQProvider<BOQAccount> {
         provider.connection.getTokenAccountBalance(Pubkey.findAssociatedTokenAddress(wallet, kTokenMint).pubkey),
         provider.connection.getSlot(),
       ]);
-      employerAccount = responses[0];
-      shiftAccount = responses[1];
+      employerAccount = responses[0] as AccountInfo<dynamic>?;
+      shiftAccount = responses[1] as AccountInfo<dynamic>?;
       tokenAmount = responses[2] as TokenAmount;
       slot = responses[3] as int;
     } else {
