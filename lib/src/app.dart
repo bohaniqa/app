@@ -67,7 +67,7 @@ class _BOQAppState extends State<BOQApp> {
 
   Future<void> _connectWallet() async {
     final provider = SolanaWalletProvider.of(context);
-    provider.connect(context, options: [provider.adapter.store.apps[1]]).ignore();
+    provider.connect(context).ignore();
   }
 
   Widget _signInPopup() => ColoredBox(
