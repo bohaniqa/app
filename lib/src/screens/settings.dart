@@ -89,7 +89,7 @@ class _BOQSettingsScreenState extends State<BOQSettingsScreen> {
           ),
           BOQListTile(
             title: 'Theme',
-            subtitle: '${_brightness.name.capitalize()} Mode',
+            subtitle: '${_brightness.name.toUpperCase()} Mode',
             onTap: _onTapBrightnessTile,
             trailing: Switch(
               onChanged: _onBrightnessChanged,

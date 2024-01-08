@@ -234,14 +234,14 @@ class _BOQShiftModalState extends State<BOQShiftModal> {
         }
       }
     }
-    print('**********');
-    print('TOTAL EMPLOYEE SLOTS = $ts');
-    print('**********');
+    // print('**********');
+    // print('TOTAL EMPLOYEE SLOTS = $ts');
+    // print('**********');
 
-    print('**********');
-    print('EMPLOYEER BASE RATE = ${employer.base_rate_per_slot}');
-    print('EMPLOYEER INFL RATE = ${employer.inflation_rate_per_slot}');
-    print('**********');
+    // print('**********');
+    // print('EMPLOYEER BASE RATE = ${employer.base_rate_per_slot}');
+    // print('EMPLOYEER INFL RATE = ${employer.inflation_rate_per_slot}');
+    // print('**********');
     return accounts;
   }
 
